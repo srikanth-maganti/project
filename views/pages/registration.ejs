@@ -1,0 +1,429 @@
+
+<style>
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #232f3e;
+            font-size: 28px;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #ddd;
+            z-index: 1;
+        }
+
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-step.active {
+            background: #232f3e;
+            border-color: #232f3e;
+            color: white;
+        }
+
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .section-title {
+            color: #232f3e;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #232f3e;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #232f3e;
+        }
+
+        .error {
+            color: #d00;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .btn-next {
+            background: #232f3e;
+            color: white;
+        }
+
+        .btn-next:hover {
+            background: #1a2532;
+        }
+
+        .btn-back {
+            background: #e6e6e6;
+            color: #232f3e;
+        }
+
+        .btn-back:hover {
+            background: #d9d9d9;
+        }
+
+        .info-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            color: #008000;
+            padding: 20px;
+            background: #f0fff0;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .checkbox-group {
+            margin-top: 10px;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .checkbox-group label {
+            display: inline;
+            color: #444;
+        }
+    </style>
+
+    <div class="container">
+        <div class="logo">
+            <h1>SecondBooks Seller Registration</h1>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-step active">1</div>
+            <div class="progress-step">2</div>
+            <div class="progress-step">3</div>
+        </div>
+
+        <div class="form-container">
+            <form id="sellerForm" action="/seller" method="post">
+                <!-- Business Information -->
+                <div class="form-section active" id="section1">
+                    <h2 class="section-title">Business Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="businessName">Legal Business Name*</label>
+                        <input type="text" id="businessName" name="seller[businessName]" required>
+                        <div class="error" id="businessNameError">Please enter your business name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gstNumber">GST Number*</label>
+                        <input type="text" id="gstNumber"  name="seller[gstNumber]" required>
+                        <div class="error" id="gstNumberError">Please enter a valid GST number</div>
+                        <div class="info-text">Format: 22AAAAA0000A1Z5</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="panNumber">PAN Number*</label>
+                        <input type="text" id="panNumber" name="seller[panNumber]" required>
+                        <div class="error" id="panNumberError">Please enter a valid PAN number</div>
+                    </div>
+
+                    <div class="button-group">
+                        <div></div>
+                        <button type="button" class="btn-next" onclick="nextSection(1)">Next</button>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="form-section" id="section2">
+                    <h2 class="section-title">Contact Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="contactName">Contact Person Name*</label>
+                        <input type="text" id="contactName" name="seller[contactName]" required>
+                        <div class="error" id="contactNameError">Please enter contact person name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Business Email*</label>
+                        <input type="email" id="email" name="seller[email]" required>
+                        <div class="error" id="emailError">Please enter a valid email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Mobile Number*</label>
+                        <input type="tel" id="phone" name="seller[phone]" required>
+                        <div class="error" id="phoneError">Please enter a valid mobile number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Business Address*</label>
+                        <input type="text" id="address" name="seller[address]" required>
+                        <div class="error" id="addressError">Please enter your business address</div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn-back" onclick="previousSection(2)">Back</button>
+                        <button type="button" class="btn-next" onclick="nextSection(2)">Next</button>
+                    </div>
+                </div>
+
+                <!-- Account Setup -->
+                <div class="form-section" id="section3">
+                    <h2 class="section-title">Account Setup</h2>
+
+                    <div class="form-group">
+                        <label for="bankName">Bank Name*</label>
+                        <input type="text" id="bankName" name="seller[bankName]" required>
+                        <div class="error" id="bankNameError">Please enter bank name</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountNumber">Account Number*</label>
+                        <input type="text" id="accountNumber" name="seller[accountNumber]" required>
+                        <div class="error" id="accountNumberError">Please enter a valid account number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ifscCode">IFSC Code*</label>
+                        <input type="text" id="ifscCode" name="seller[ifscCode]" required>
+                        <div class="error" id="ifscCodeError">Please enter a valid IFSC code</div>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I agree to the Terms and Conditions</label>
+                        <div class="error" id="termsError">You must agree to the terms and conditions</div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="btn-back" onclick="previousSection(3)">Back</button>
+                        <button type="submit" class="btn-next">Submit Registration</button>
+                    </div>
+                </div>
+            </form>
+            <div class="success-message" id="successMessage">
+                Registration successful! We'll review your information and get back to you soon.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+
+        function showSection(sectionNumber) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(`section${sectionNumber}`).classList.add('active');
+            
+            // Update progress bar
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                if (index + 1 <= sectionNumber) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+
+        function nextSection(currentSectionNumber) {
+            if (validateSection(currentSectionNumber)) {
+                currentSection = currentSectionNumber + 1;
+                showSection(currentSection);
+            }
+        }
+
+        function previousSection(currentSectionNumber) {
+            currentSection = currentSectionNumber - 1;
+            showSection(currentSection);
+        }
+
+        function validateSection(sectionNumber) {
+            let isValid = true;
+            
+            // Reset all errors
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+            });
+
+            if (sectionNumber === 1) {
+                // Validate Business Information
+                const businessName = document.getElementById('businessName').value.trim();
+                const gstNumber = document.getElementById('gstNumber').value.trim();
+                const panNumber = document.getElementById('panNumber').value.trim();
+
+                if (businessName.length < 3) {
+                    document.getElementById('businessNameError').style.display = 'block';
+                    isValid = false;
+                }
+
+                const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+                if (!gstRegex.test(gstNumber)) {
+                    document.getElementById('gstNumberError').style.display = 'block';
+                    isValid = false;
+                }
+
+                const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+                if (!panRegex.test(panNumber)) {
+                    document.getElementById('panNumberError').style.display = 'block';
+                    isValid = false;
+                }
+            }
+
+            if (sectionNumber === 2) {
+                // Validate Contact Information
+                const contactName = document.getElementById('contactName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const address = document.getElementById('address').value.trim();
+
+                if (contactName.length < 3) {
+                    document.getElementById('contactNameError').style.display = 'block';
+                    isValid = false;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                }
+
+                const phoneRegex = /^[0-9]{10}$/;
+                if (!phoneRegex.test(phone)) {
+                    document.getElementById('phoneError').style.display = 'block';
+                    isValid = false;
+                }
+
+                if (address.length < 10) {
+                    document.getElementById('addressError').style.display = 'block';
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        document.getElementById('sellerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate final section
+            const bankName = document.getElementById('bankName').value.trim();
+            const accountNumber = document.getElementById('accountNumber').value.trim();
+            const ifscCode = document.getElementById('ifscCode').value.trim();
+            const terms = document.getElementById('terms').checked;
+
+            let isValid = true;
+
+            if (bankName.length < 3) {
+                document.getElementById('bankNameError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (accountNumber.length < 9 || accountNumber.length > 18) {
+                document.getElementById('accountNumberError').style.display = 'block';
+                isValid = false;
+            }
+
+            const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+            if (!ifscRegex.test(ifscCode)) {
+                document.getElementById('ifscCodeError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!terms) {
+                document.getElementById('termsError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Hide form and show success message
+                document.getElementById('sellerForm').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Here you would typically send the data to your server
+            }
+        });
+    </script>

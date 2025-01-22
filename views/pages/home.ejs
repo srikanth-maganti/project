@@ -1,0 +1,190 @@
+<%- layout("/layouts/boilerplate")%> 
+   
+    <style>
+        
+    .home-content {
+        width: 100%;
+    }
+
+    .home-img {
+        height: 500px;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .arrows {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        top: 60%;
+        left: 50%;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .arrows div {
+        margin: 2rem;
+    }
+
+    .arrows div i {
+        font-size: 3rem;
+        color: white;
+    }
+    h1{
+        text-align: center;
+    }
+    .trending, .featured {
+        margin-top: 2rem;
+    }
+
+    .trending-cards, .featured-cards {
+        display: flex;
+        gap: 1rem; /* Adds space between cards */
+        overflow-x: hidden; /* Hide the scrollbar */
+        padding: 1rem 0;
+    }
+
+    .card {
+        min-width: 18rem; /* Sets a minimum width for the cards */
+        flex-shrink: 0; /* Prevents cards from shrinking */
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    /* quote */
+    .quote
+    {
+        display:flex;
+        height:50rem;
+        width:100%;
+        border:2px solid black;
+        justify-content: center;
+        align-items: center;
+    }
+    .quote-img{
+        width:50%;
+        height:100%;
+        padding:1rem;
+    }
+
+    .quote-img img{
+        height:100%;
+        width:100;
+        
+    }
+    .quote-text{
+        font:600;
+    }
+</style>
+
+    
+    <div class ="home-content">
+        <div>
+            <img src="/images/pic2.jpg" alt="?" class="home-img">
+            <div class="arrows">
+                <div class="left"><i class="fa-solid fa-chevron-left"></i></div>
+                <div class="right"><i class="fa-solid fa-chevron-right"></i></div>
+            </div>
+        </div>
+
+        <div class="trending">
+        <h1>Trending books</h1>
+        <div class="trending-cards">
+            <% for(book of data){ %>
+            <div class="card" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text"> title and make up the bulk</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+              <%}%>
+        </div>
+        </div>
+        
+        <div class="featured">
+        <h1>Featured books</h1>
+        <div class="featured-cards"> 
+            <% for(book of data){ %>
+            <div class="card" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text"> title and make up the bulk of the card's</p>
+                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+              </div>
+              <%}%>
+        </div>  
+        </div>
+
+        <div class="quote">
+            <div class="quote-img">
+                <img src="/girl.jpg" alt="">
+            </div>
+            <div class="quote-content">
+                <blockquote class="quote-text">
+                    "A reader lives a thousand lives before he dies. The man who never reads lives only one."
+                    <footer class="quote-author">
+                        - George R.R. Martin
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+    <script>
+        const setupInfiniteScroll = (containerSelector, scrollStep, scrollInterval) => {
+            const container = document.querySelector(containerSelector);
+            const cards = Array.from(container.children);
+    
+            // Clone first and last few cards for seamless scroll
+            cards.slice(0, 5).forEach((card) => {
+                container.appendChild(card.cloneNode(true));
+            });
+    
+            cards.slice(-5).forEach((card) => {
+                container.insertBefore(card.cloneNode(true), container.firstChild);
+            });
+    
+            // Auto-scrolling logic
+            let scrollAmount = 0;
+    
+            const autoScroll = () => {
+                container.scrollLeft += scrollStep;
+                scrollAmount += scrollStep;
+    
+                // Reset scroll position if reaching the cloned end
+                if (scrollAmount >= container.scrollWidth / 2) {
+                    scrollAmount = 0;
+                    container.scrollLeft = 0;
+                }
+            };
+    
+            let autoScrollInterval = setInterval(autoScroll, scrollInterval);
+    
+            // Pause scrolling on hover
+            container.addEventListener("mouseover", () => clearInterval(autoScrollInterval));
+            container.addEventListener("mouseout", () => {
+                autoScrollInterval = setInterval(autoScroll, scrollInterval);
+            });
+        };
+    
+        // Initialize with different speeds
+        document.addEventListener("DOMContentLoaded", () => {
+            setupInfiniteScroll(".trending-cards", 2, 30); // Faster scrolling
+            setupInfiniteScroll(".featured-cards", 1, 50); // Slower scrolling
+        });
+    </script>
+    
+    
+    
+    
+    

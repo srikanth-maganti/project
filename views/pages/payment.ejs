@@ -1,0 +1,380 @@
+
+
+<style>
+        /* * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        } */
+
+        /* :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --background-color: #f8f9fa;
+            --border-color: #e0e0e0;
+        } */
+
+        /* body {
+            background-color: var(--background-color);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        } */
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .payment-section, .order-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .payment-method {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .payment-method.active {
+            border-color: var(--secondary-color);
+            background-color: #f8f9ff;
+        }
+
+        .payment-method img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .payment-form {
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .card-details {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .order-summary {
+            height: fit-content;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .btn-pay {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-pay:hover {
+            background: #219a52;
+        }
+
+        .secure-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .secure-badge i {
+            color: var(--success-color);
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .success-message h2 {
+            color: var(--success-color);
+            margin-bottom: 15px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+    </style>
+
+    <div class="container">
+        <div class="payment-section">
+            <h2 class="section-title">Select Payment Method</h2>
+            
+            <div class="payment-methods">
+                <div class="payment-method active" onclick="selectPaymentMethod(this, 'card')">
+                    <img src="/api/placeholder/60/60" alt="Credit Card">
+                    <div>Credit/Debit Card</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod(this, 'upi')">
+                    <img src="/api/placeholder/60/60" alt="UPI">
+                    <div>UPI Payment</div>
+                </div>
+                <div class="payment-method" onclick="selectPaymentMethod(this, 'netbanking')">
+                    <img src="/api/placeholder/60/60" alt="Net Banking">
+                    <div>Net Banking</div>
+                </div>
+            </div>
+
+            <form id="paymentForm" class="payment-form">
+                <div id="cardPayment">
+                    <div class="form-group">
+                        <label for="cardName">Name on Card</label>
+                        <input type="text" id="cardName" placeholder="Enter name as on card">
+                        <div class="error" id="cardNameError">Please enter the name on your card</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                        <div class="error" id="cardNumberError">Please enter a valid card number</div>
+                    </div>
+
+                    <div class="card-details">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5">
+                            <div class="error" id="expiryError">Please enter a valid expiry date</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="password" id="cvv" placeholder="123" maxlength="3">
+                            <div class="error" id="cvvError">Please enter a valid CVV</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-pay">Pay ₹599</button>
+            </form>
+
+            <div class="secure-badge">
+                🔒 Secure Payment | 256-bit SSL Encrypted
+            </div>
+        </div>
+
+        <div class="order-summary">
+            <h2 class="section-title">Order Summary</h2>
+            
+            <div class="order-item">
+                <span>The Great Gatsby (Used)</span>
+                <span>₹299</span>
+            </div>
+
+            <div class="order-item">
+                <span>To Kill a Mockingbird (Used)</span>
+                <span>₹249</span>
+            </div>
+
+            <div class="order-item">
+                <span>Shipping Fee</span>
+                <span>₹51</span>
+            </div>
+
+            <div class="order-total">
+                <span>Total</span>
+                <span>₹599</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="success-message" id="successMessage">
+        <h2>Payment Successful! 🎉</h2>
+        <p>Your order has been confirmed.<br>You will receive an email with the details shortly.</p>
+    </div>
+
+    <script>
+        function selectPaymentMethod(element, method) {
+            // Remove active class from all methods
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Add active class to selected method
+            element.classList.add('active');
+            
+            // Show/hide relevant form sections (for future implementation)
+            if (method === 'card') {
+                document.getElementById('cardPayment').style.display = 'block';
+            } else {
+                document.getElementById('cardPayment').style.display = 'none';
+            }
+        }
+
+        // Format card number with spaces
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+
+        // Format expiry date
+        document.getElementById('expiryDate').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.slice(0,2) + '/' + value.slice(2);
+            }
+            e.target.value = value;
+        });
+
+        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            document.querySelectorAll('.error').forEach(error => {
+                error.style.display = 'none';
+            });
+
+            // Validate card name
+            const cardName = document.getElementById('cardName').value.trim();
+            if (cardName.length < 3) {
+                document.getElementById('cardNameError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate card number
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            if (cardNumber.length !== 16 || !/^\d+$/.test(cardNumber)) {
+                document.getElementById('cardNumberError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate expiry date
+            const expiry = document.getElementById('expiryDate').value;
+            if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+                document.getElementById('expiryError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate CVV
+            const cvv = document.getElementById('cvv').value;
+            if (!/^\d{3}$/.test(cvv)) {
+                document.getElementById('cvvError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Show success message
+                document.getElementById('overlay').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'block';
+
+                // Reset form
+                this.reset();
+
+                // Hide success message after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('overlay').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 3000);
+            }
+        });
+    </script>

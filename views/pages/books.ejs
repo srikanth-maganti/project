@@ -1,0 +1,256 @@
+<%- layout("/layouts/boilerplate")%> 
+<div class="container-fluid">
+   <div class="browse-layout">
+       <!-- Sidebar -->
+       <div class="categories-sidebar">
+           <h3 class="categories-title">Categories</h3>
+           <div class="category-list">
+               <a class="category-btn active btn" href="/books?category=All">All Books</a>
+               <a class="category-btn btn" href="/books?category=Science Fiction">Science Fiction</a>
+               <a class="category-btn btn" href="/books?category=Comics">Comics</a>
+               <a class="category-btn btn" href="/books?category=Mystery">Mystery</a>
+               <a class="category-btn btn" href="/books?category=Classic">Classic</a>
+               <a class="category-btn btn" href="/books?category=Fantasy">Fantasy</a>
+               <a class="category-btn btn" href="/books?category=Romance">Science</a>
+               <a class="category-btn btn" href="/books?category=Romance">Romance</a>
+           </div>
+       </div>
+
+       <!-- Main Content -->
+        
+       <div class="books-grid">
+           <% for(book of data) { %>
+               <div class="book-card">
+                   <div class="book-image">
+                       <img src="<%= book.Image %>" alt="<%= book.Title %>">
+                       <!-- <div class="quick-actions">
+                           <a class="quick-view btn" href="/books/show/<%= book._id %>">Quick View</button>
+                       </div> -->
+                   </div>
+                   <div class="book-info">
+                       <h4 class="book-title"><%= book.Title %></h4>
+                       <div class="book-meta">
+                           <span class="book-category"><%= book.Category %></span>
+                           <span class="book-price">₹<%= book.Price %></span>
+                       </div>
+                       <a href="/books/show/<%= book._id %>" class="view-details">View Details</a>
+                   </div>
+               </div>
+           <% } %>
+       </div>
+   </div>
+</div>
+
+<style>
+.container {
+   max-width: 1200px;
+   margin: 0 auto;
+   padding: 20px;
+}
+
+.browse-layout {
+   display: flex;
+   gap: 30px;
+   min-height: calc(100vh - 200px); /* Adjust based on your navbar/footer height */
+}
+
+/* Sidebar Styles */
+.categories-sidebar {
+   width: 250px;
+   flex-shrink: 0;
+   background: white;
+   border-radius: 8px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   padding: 20px;
+   height: fit-content;
+}
+
+.categories-title {
+   font-size: 1.25rem;
+   color: #333;
+   margin-bottom: 20px;
+   padding-bottom: 10px;
+   border-bottom: 2px solid #eee;
+}
+
+.category-list {
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+}
+
+.category-btn {
+   padding: 12px 16px;
+   text-align: left;
+   background: none;
+   border: none;
+   border-radius: 6px;
+   color: #555;
+   cursor: pointer;
+   transition: all 0.2s ease;
+}
+
+.category-btn:hover {
+   background: #f8f9fa;
+   color: #2563eb;
+}
+
+.category-btn.active {
+   background: #2563eb;
+   color: white;
+}
+
+/* Books Grid Styles */
+.books-grid {
+   flex: 1;
+   display: grid;
+   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+   gap: 25px;
+   align-content: start;
+}
+
+.book-card {
+   background: white;
+   /* height:20rem; */
+   border-radius: 8px;
+   overflow: hidden;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+   transform: translateY(-5px);
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.book-image {
+   position: relative;
+   aspect-ratio: 2/3;
+   height: 15rem;
+   width:100%;
+   
+   overflow: hidden;
+}
+
+.book-image img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+}
+
+.quick-actions {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   padding: 15px;
+   background: linear-gradient(transparent, rgba(0,0,0,0.7));
+   opacity: 0;
+   transition: opacity 0.2s ease;
+}
+
+.book-card:hover .quick-actions {
+   opacity: 1;
+}
+
+.quick-view {
+   width: 100%;
+   padding: 8px;
+   background: white;
+   border: none;
+   border-radius: 4px;
+   color: #333;
+   cursor: pointer;
+   transition: background 0.2s ease;
+}
+
+.quick-view:hover {
+   background: #f0f0f0;
+}
+
+.book-info {
+   padding: 15px;
+}
+
+.book-title {
+   font-size: 1rem;
+   color: #333;
+   /* margin-bottom: 10px; */
+   display: -webkit-box;
+   -webkit-line-clamp: 2;
+   -webkit-box-orient: vertical;
+   overflow: hidden;
+}
+
+.book-meta {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 15px;
+}
+
+.book-category {
+   font-size: 0.875rem;
+   color: #666;
+   padding: 4px 8px;
+   background: #f8f9fa;
+   border-radius: 4px;
+}
+
+.book-price {
+   font-weight: bold;
+   color: #2563eb;
+}
+
+.view-details {
+   display: block;
+   text-align: center;
+   padding: 8px;
+   background: #2563eb;
+   color: white;
+   text-decoration: none;
+   border-radius: 4px;
+   transition: background 0.2s ease;
+}
+
+.view-details:hover {
+   background: #1d4ed8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+   .browse-layout {
+       flex-direction: column;
+   }
+
+   .categories-sidebar {
+       width: 100%;
+   }
+
+   .books-grid {
+       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+   }
+}
+/* Update these styles in your existing CSS */
+
+.categories-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    height: fit-content;
+    /* Add these new properties */
+    position: sticky;
+    top: 20px; /* Adjust this value based on your navbar height */
+}
+
+/* Update the browse-layout to ensure proper spacing */
+.browse-layout {
+    display: flex;
+    gap: 30px;
+    min-height: calc(100vh - 200px);
+    position: relative; /* Add this */
+}
+</style>

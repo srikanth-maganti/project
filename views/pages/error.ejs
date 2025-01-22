@@ -1,0 +1,178 @@
+<%- layout("/layouts/boilerplate") %>
+    <style>
+        /* * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        } */
+
+        /* body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2d3748;
+        } */    
+         
+
+        .error-container {
+            
+            padding: 2rem;
+            max-width: 600px;
+           text-align: center;
+           transform: translateX(70%);
+            
+
+
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #e53e3e;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .error-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.2s forwards;
+        }
+
+        .error-description {
+            color: #718096;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.4s forwards;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.6s forwards;
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            text-decoration: none;
+        }
+
+        .primary-button {
+            background-color: #e53e3e;
+            color: white;
+            border: none;
+        }
+
+        .primary-button:hover {
+            background-color: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            background-color: transparent;
+            color: #2d3748;
+            border: 2px solid #2d3748;
+        }
+
+        .secondary-button:hover {
+            background-color: #2d3748;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shopping-cart {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards, wobble 2s ease-in-out infinite;
+        }
+
+        @keyframes wobble {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-5px) rotate(-5deg);
+            }
+            75% {
+                transform: translateX(5px) rotate(5deg);
+            }
+        }
+    </style>
+<div>
+
+    <div class="error-container">
+        <svg class="shopping-cart" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        
+        <h1 class="error-message">Oops!<%= message %></h1>
+       
+        <div class="button-group">
+            <a href="/" class="button primary-button">Back to Home</a>
+            <a href="/books?category=All" class="button secondary-button">Browse Products</a>
+        </div>
+    </div>
+
+    <script>
+        // Add click event listeners to buttons
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Add ripple effect animation
+                const ripple = document.createElement('div');
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.3)';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                
+                document.body.appendChild(ripple);
+                
+                setTimeout(() => {
+                    document.body.removeChild(ripple);
+                }, 600);
+            });
+        });
+
+        // Track error for analytics
+        window.addEventListener('load', () => {
+            if (typeof analytics !== 'undefined') {
+                analytics.track('Error Page Viewed', {
+                    errorCode: 404,
+                    url: window.location.href,
+                    referrer: document.referrer
+                });
+            }
+        });
+    </script>
+</div>

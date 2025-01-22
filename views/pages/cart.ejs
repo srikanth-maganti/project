@@ -1,0 +1,389 @@
+<%- layout("/layouts/boilerplate")%> 
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --light-gray: #f8f9fa;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            /* padding-top: 100px; */
+            min-height: 100vh;
+        }
+
+        .cart-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cart-title {
+            color: var(--secondary-color);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .cart-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .item-image {
+            width: 120px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .item-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .item-title {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+            text-decoration: none;
+        }
+
+        .item-title:hover {
+            color: var(--primary-color);
+        }
+
+        .item-author {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .item-condition {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .quantity-btn {
+            background: var(--light-gray);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .item-price {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .remove-btn {
+            color: var(--danger-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .remove-btn:hover {
+            background: #ffebee;
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--light-gray);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .checkout-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .continue-shopping {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .continue-shopping:hover {
+            color: var(--secondary-color);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .empty-cart i {
+            font-size: 5rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .item-image {
+                width: 100px;
+                height: 150px;
+            }
+
+            .cart-item {
+                padding: 15px;
+            }
+
+            .cart-summary {
+                margin-top: 20px;
+                position: static;
+            }
+        }
+    </style>
+
+<body>
+    
+
+    <div class="cart-container">
+        <h1 class="cart-title">
+            <%
+            let totalcount=0;
+            let total=0;
+            for(book of data){
+                totalcount+=book.Count;
+                total+=book.Price*book.Count;
+            }
+            %>
+            <i class="fas fa-shopping-cart"></i>
+            Shopping Cart (<%=totalcount%> Items)
+           
+
+                
+        </h1>
+
+        <div class="row">
+            <!-- Cart Items -->
+            <div class="col-lg-8">
+                <!-- Cart Item 1 -->
+                 <% for(book of data) {%>
+
+
+                <div class="cart-item">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 m-2 col-4">
+                            <img src="<%= book.Image%>" alt="Book Cover" class="item-image">
+                        </div>
+                        <div class="col-md-6 col-8">
+                            <div class="item-details">
+                                <div>
+                                    <a href="/books/show/<%=book._id%>" class="item-title"><%= book.Title %></a>
+                                    <p class="item-author"><%= book.Author %></p>
+                                    <p class="item-condition">Condition: Good</p>
+                                </div>
+                                <div class="quantity-control">
+                                    <form action="/cart/<%=book._id %>?_method=PATCH" method="post">
+                                        <div class="d-flex">
+                                        <button class="quantity-btn" type="submit" name="action" value="decrement">-</button>
+                                        <input type="number" class="quantity-input" name="count" value="<%=book.Count%>" min="1">
+                                        <button class="quantity-btn" type="submit" name="action" value="increment">+</button>
+                                       </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mt-3 mt-md-0">
+                            <div class="text-md-end">
+                                <p class="item-price"><%= book.Price %></p>
+                                <form action="/cart/<%=book._id%>?_method=DELETE" method="post">
+                                <button class="remove-btn" type="submit">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+           <% }%>
+                
+                <a href="/books" class="continue-shopping">
+                    <i class="fas fa-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="col-lg-4">
+                <div class="cart-summary">
+                    <h2 class="summary-title">Order Summary</h2>
+                    <div class="summary-item">
+                        <span>Subtotal (<%=totalcount%> items)</span>
+                        <span><%=total%></span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shipping</span>
+                        <span>24</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Tax</span>
+                        <span>12</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <span><%= total+24+12%></span>
+                    </div>
+                    <button class="checkout-btn">
+                        Proceed to Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty Cart State (hidden by default) -->
+        <div class="empty-cart" style="display: none;">
+            <i class="fas fa-shopping-cart"></i>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added any books to your cart yet.</p>
+            <a href="/books" class="btn btn-primary mt-3">
+                Start Shopping
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Quantity controls
+        document.querySelectorAll('.quantity-control').forEach(control => {
+            const input = control.querySelector('.quantity-input');
+            const [decreaseBtn, increaseBtn] = control.querySelectorAll('.quantity-btn');
+
+            decreaseBtn.addEventListener('click', () => {
+                const currentValue = parseInt(input.value);
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                    updateCart();
+                }
+            });
+
+            increaseBtn.addEventListener('click', () => {
+                input.value = parseInt(input.value) + 1;
+                updateCart();
+            });
+
+            input.addEventListener('change', () => {
+                if (input.value < 1) input.value = 1;
+                updateCart();
+            });
+        });
+
+        // Remove item functionality
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.closest('.cart-item');
+                item.style.opacity = '0';
+                setTimeout(() => {
+                    item.remove();
+                    updateCart();
+                    
+                    // Check if cart is empty
+                    if (document.querySelectorAll('.cart-item').length === 0) {
+                        document.querySelector('.empty-cart').style.display = 'block';
+                        document.querySelector('.row').style.display = 'none';
+                    }
+                }, 300);
+            });
+        });
+
+        // Update cart totals
+        function updateCart() {
+            // This would typically involve AJAX calls to the server
+            // For demo purposes, we'll just show an update animation
+            const summary = document.querySelector('.cart-summary');
+            summary.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                summary.style.transform = 'scale(1)';
+            }, 200);
+        }
+    </script>
+</body>
